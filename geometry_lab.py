@@ -8,24 +8,29 @@ coursera = 1
 from mat import Mat
 from vec import Vec
 import math
+from image_mat_util import *
+
+## Ungraded task
+# A=file2mat('board.png')
+# mat2display(A[0],A[1])
 
 ## Task 1
 def identity(labels = {'x','y','u'}):
     '''
     In case you have never seen this notation for a parameter before,
     it defines the default value of labels to be {'x','y','u'}.
-    You should write your procedure as if 
-    it were defined 'def identity(labels):'.  However, if you want the labels of 
-    your identity matrix to be {'x','y','u'}, you can just call 
+    You should write your procedure as if
+    it were defined 'def identity(labels):'.  However, if you want the labels of
+    your identity matrix to be {'x','y','u'}, you can just call
     identity().  If you want {'r','g','b'}, or another set, to be the
-    labels of your matrix, you can call identity({'r','g','b'}).  
+    labels of your matrix, you can call identity({'r','g','b'}).
 
     >>> identity()==Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):1, ('y','y'):1, ('u','u'):1})
     True
     >>> identity({'r','g','b'})==Mat(({'r','g','b'},{'r','g','b'}), {('r','r'):1, ('g','g'):1, ('b','b'):1})
     True
     '''
-    pass
+    return Mat((labels, labels), {(a,a):1 for a in labels})
 
 ## Task 2
 def translation(x,y):
@@ -36,7 +41,7 @@ def translation(x,y):
     >>> translation(9,10)==Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):1, ('y','y'):1, ('u','u'):1, ('y','u'):10, ('x','u'):9})
     True
     '''
-    pass
+    return Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):1, ('y','y'):1, ('u','u'):1, ('y','u'):y, ('x','u'):x})
 
 ## Task 3
 def scale(a, b):
@@ -49,7 +54,7 @@ def scale(a, b):
     >>> scale(0,0)*Vec({'x','y','u'}, {'x':1,'y':1,'u':1}) == Vec({'x','y','u'}, {'u':1})
     True
     '''
-    pass
+    return Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):a, ('x','y'):0,('x','u'):0,('y','x'):0,('y','y'):b,('y','u'):0,('u','x'):0,('u','y'):0,('u','u'):1})
 
 ## Task 4
 def rotation(angle):
@@ -64,7 +69,7 @@ def rotation(angle):
     >>> normsq(rotation(math.pi/2) * Vec({'u', 'x', 'y'},{'x':3,'y':1,'u':1}) - Vec({'u', 'x', 'y'},{'u': 1, 'x': -1, 'y': 3.0})) < 1e-15
     True
     '''
-    pass
+    return Mat(({'x','y','u'},{'x','y','u'}), {('x','x'):math.cos(angle), ('x','y'):-math.sin(angle),('x','u'):0,('y','x'):math.sin(angle),('y','y'):math.cos(angle),('y','u'):0,('u','x'):0,('u','y'):0,('u','u'):1})
 
 ## Task 5
 def rotate_about(x,y,angle):
@@ -74,7 +79,8 @@ def rotate_about(x,y,angle):
     Output:  Corresponding 3x3 rotation matrix.
     It might be helpful to use procedures you already wrote.
     '''
-    pass
+    return translation(x,y)*rotation(angle)*translation(-x,-y)
+
 
 ## Task 6
 def reflect_y():
@@ -89,8 +95,7 @@ def reflect_y():
     >>> reflect_y()*w == Vec({'x','y','u'},{'u':1})
     True
     '''
-    pass
-
+    return scale(-1,1)
 ## Task 7
 def reflect_x():
     '''
@@ -104,7 +109,7 @@ def reflect_x():
     >>> reflect_x()*w == Vec({'x','y','u'},{'u':1})
     True
     '''
-    pass
+    return scale(1, -1)
 
 ## Task 8    
 def scale_color(scale_r,scale_g,scale_b):
@@ -115,7 +120,7 @@ def scale_color(scale_r,scale_g,scale_b):
     >>> scale_color(1,2,3)*Vec({'r','g','b'},{'r':1,'g':2,'b':3}) == Vec({'r','g','b'},{'r':1,'g':4,'b':9})
     True
     '''
-    pass
+    return Mat(({'r','g','b'},{'r','g','b'}),{('r','r'):scale_r,('r','g'):0,('r','b'):0,('g','r'):0,('g','g'):scale_g,('g','b'):0,('b''r'):0,('b','g'):0,('b','b'):scale_b})
 
 ## Task 9
 def grayscale():
@@ -123,7 +128,8 @@ def grayscale():
     Input: None
     Output: 3x3 greyscale matrix.
     '''
-    pass
+    #return scale_color(77/256.0, 151/256.0,28/256.0)
+    return Mat(({'r','g','b'},{'r','g','b'}),{('r','r'):77/256.0,('r','g'):151/256.0,('r','b'):28/256.0,('g','r'):77/256.0,('g','g'):151/256.0,('g','b'):28/256.0,('b','r'):77/256.0,('b','g'):151/256.0,('b','b'):28/256.0})
 
 ## Task 10
 def reflect_about(x1, y1, x2, y2):
@@ -137,6 +143,5 @@ def reflect_about(x1, y1, x2, y2):
     >>> normsq(reflect_about(0,0,1,1) * Vec({'x','y','u'}, {'x':1, 'u':1}) - Vec({'x', 'u', 'y'},{'u': 1, 'y': 1})) < 1e-15
     True
     '''
-    pass
-
-
+    theta = math.atan2(y2 - y1, x2 - x1)
+    return translation(x2,y2)*rotation(theta)*reflect_x()*rotation(-theta)*translation(-x2,-y2)
