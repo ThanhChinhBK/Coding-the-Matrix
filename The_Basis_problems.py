@@ -225,10 +225,11 @@ def is_superfluous(S, v):
     assert v in S
     if len(S)==1:
         if list(S)[0].f=={}:
-            return False
-        else:
             return True
+        else:
+            return False
     A=coldict2mat([x for x in S if x!=v])
+    #A=coldict2mat(list(S.remove(v)))
     u=solve(A,v)
     if (v-A*u).is_almost_zero():
         return True
