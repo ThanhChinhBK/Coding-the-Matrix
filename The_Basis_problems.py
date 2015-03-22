@@ -307,9 +307,7 @@ def exchange(S, A, z):
         >>> exchange(S, A, z) == list2vec([one,0,one,one,one])
         True
     '''
-    newS = list()
-    for v in S:
-        newS.append(v)
+    newS = list(S)
     newS.append(z)
 
     for x in newS:
