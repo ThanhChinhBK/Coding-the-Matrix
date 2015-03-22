@@ -17,9 +17,9 @@ from vecutil import list2vec
 #
 # For example, [1, 3, 5] would mean 1*[2,0,4,0] + 3*[0,1,0,1] + 5*[0,0,-1,-1]
 
-rep_1 = [...]
-rep_2 = [...]
-rep_3 = [...]
+rep_1 = [1,1,0]
+rep_2 = [0.5,1,1]
+rep_3 = [0,1,-1]
 
 
 
@@ -27,10 +27,10 @@ rep_3 = [...]
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
-lin_comb_coefficients_1 = [...]
-lin_comb_coefficients_2 = [...]
-lin_comb_coefficients_3 = [...]
-lin_comb_coefficients_4 = [...]
+lin_comb_coefficients_1 = [3,-1,1]
+lin_comb_coefficients_2 = [0.5,-1.5,1]
+lin_comb_coefficients_3 = [0.5, -5.5,4]
+lin_comb_coefficients_4 = [1,-2,1]
 
 
 
@@ -39,9 +39,9 @@ lin_comb_coefficients_4 = [...]
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
-gf2_rep_1 = [...]
-gf2_rep_2 = [...]
-gf2_rep_3 = [...]
+gf2_rep_1 = [one, 0, one, 0]
+gf2_rep_2 = [one, 0, 0, one]
+gf2_rep_3 = [one, one, 0, one]
 
 
 
@@ -50,10 +50,10 @@ gf2_rep_3 = [...]
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
-gf2_lc_rep_1 = [...]
-gf2_lc_rep_2 = [...]
-gf2_lc_rep_3 = [...]
-gf2_lc_rep_4 = [...]
+gf2_lc_rep_1 = [one, one, one, 0, 0, 0, 0, 0]
+gf2_lc_rep_2 = [0, 0, 0, 0, 0, 0, one, one]
+gf2_lc_rep_3 = [0, 0, one, 0, 0, one, 0, 0]
+gf2_lc_rep_4 = [one, 0, one, 0, 0, 0, 0, 0]
 
 
 
@@ -61,18 +61,18 @@ gf2_lc_rep_4 = [...]
 # For each part, please provide your solution as a list of the coefficients for
 # the generators of V.
 
-lin_dep_R_1 = [...]
-lin_dep_R_2 = [...]
-lin_dep_R_3 = [...]
+lin_dep_R_1 = [-2,1,1]
+lin_dep_R_2 = [-4,1,-4/7.0]
+lin_dep_R_3 = [-0.3, 0, 0, 1,3]
 
 
 
 ## 6: (Problem 6) Linear Dependence over R B
 # Please record your solution as a list of coefficients
 
-linear_dep_R_1 = [...]
-linear_dep_R_2 = [...]
-linear_dep_R_3 = [...]
+linear_dep_R_1 = [1,-1,3]
+linear_dep_R_2 = [-2, -1/pi, -sqrt(2)/2.0]
+linear_dep_R_3 = [1,1,1,1,1]
 
 
 
@@ -83,9 +83,9 @@ linear_dep_R_3 = [...]
 # For example, if you want to say that w equals 2*u+3*v, you would
 # assign 'w' to sum_to, assign 2 to u_coeff, and assign 3 to v_coeff.
 # (In this case, it would not matter what was assigned to w_coeff.)
-sum_to = ...
-u_coeff = ...
-v_coeff = ...
+sum_to = 'w'
+u_coeff =-1
+v_coeff =1
 w_coeff = ...
 
 
@@ -93,10 +93,10 @@ w_coeff = ...
 ## 8: (Problem 8) 4 linearly dependent vectors, every 3 are independent
 # Please use the Vec class to represent your vectors
 
-indep_vec_1 = Vec({...}, {...})
-indep_vec_2 = Vec({...}, {...})
-indep_vec_3 = Vec({...}, {...})
-indep_vec_4 = Vec({...}, {...})
+indep_vec_1 = Vec({1,2,3}, {1:1,2:0,3:0})
+indep_vec_2 = Vec({1,2,3}, {1:0,2:1,3:0})
+indep_vec_3 = Vec({1,2,3}, {1:0,2:0,3:1})
+indep_vec_4 = Vec({1,2,3}, {1:100,2:-9,3:7})
 
 
 
@@ -104,9 +104,9 @@ indep_vec_4 = Vec({...}, {...})
 # For each subproblem, assign to the corresponding variable the list of
 # coefficients (0 or one) for which the linear combination is zero.
 
-zero_comb_1 = [...]
-zero_comb_2 = [...]
-zero_comb_3 = [...]
+zero_comb_1 = [one, one, 0, one]
+zero_comb_2 = [0, one, one, one]
+zero_comb_3 = [one, one, 0, 0, one]
 
 
 
@@ -114,34 +114,34 @@ zero_comb_3 = [...]
 # In each subproblem, give your solution as a list of coefficients selected from {0, one}
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5]
-sum_to_zero_1 = [...]
+sum_to_zero_1 = [0, one, 0, one, one]
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v5, coeff of v7, coeff of v8]
-sum_to_zero_2 = [...]
+sum_to_zero_2 = [0, one, 0, one, one, 0, 0]
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v4, coeff of v6]
-sum_to_zero_3 = [...]
+sum_to_zero_3 = [one, 0, one, one, one]
 
 # [coeff of v1, coeff of v2, coeff of v3, coeff of v5, coeff of v6, coeff of v7, coeff of v8]
-sum_to_zero_4 = [...]
+sum_to_zero_4 = [one, one, one, one, one, 0, 0]
 
 
 
 ## 11: (Problem 11) Exchange Lemma for Vectors over $\R$
 ## Please express your answer as a list of ints, such as [1,0,0,0,0]
 
-exchange_1 = [...]
-exchange_2 = [...]
-exchange_3 = [...]
+exchange_1 = [0,0,1,0,0]
+exchange_2 = [0,0,0,1,0]
+exchange_3 = [0,0,1,0,0]
 
 
 
 ## 12: (Problem 12) Exchange Lemma for Vectors over GF(2)
 # Please give the name of the vector you want to replace as a string (e.g. 'v1')
 
-replace_1 = ...
-replace_2 = ...
-replace_3 = ...
+replace_1 = 'v3'
+replace_2 = 'v1'
+replace_3 = 'v4'
 
 
 
@@ -163,8 +163,7 @@ def rep2vec(u, veclist):
         >>> rep2vec(Vec({0,1,2}, {0:2, 1:4}), [v0, v1, v2]) == Vec({'d', 'a', 'c', 'b'},{'a': 6, 'c': 0, 'b': 8, 'd': 0})
         True
     '''
-    pass
-
+    return coldict2mat(veclist)*u
 
 
 ## 14: (Problem 14) vec2rep
@@ -183,8 +182,7 @@ def vec2rep(veclist, v):
         >>> vec2rep([v0,v1,v2], v)  == Vec({0, 1, 2},{0: 1.5, 1: -0.25, 2: 1.25})
         True
     '''
-    pass
-
+    return solve(coldict2mat(veclist), v)
 
 
 ## 15: (Problem 15) Superfluous Vector in Python
@@ -225,10 +223,17 @@ def is_superfluous(S, v):
     False
     '''
     assert v in S
-    pass
-
-
-
+    if len(S)==1:
+        if list(S)[0].f=={}:
+            return False
+        else:
+            return True
+    A=coldict2mat([x for x in S if x!=v])
+    u=solve(A,v)
+    if (v-A*u).is_almost_zero():
+        return True
+    else:
+        return False
 ## 16: (Problem 16) is_independent in Python
 def is_independent(S):
     '''
@@ -256,8 +261,10 @@ def is_independent(S):
     >>> is_independent({list2vec(v) for v in [[one,one,0,0,0],[0,one,one,0,0],[0,0,one,one,0],[0,0,0,one,one]]})
     True
     '''
-    pass
-
+    for v in S:
+        if is_superfluous(S,v):
+            return False
+    return True
 
 
 ## 17: (Problem 17) Exchange Lemma in Python
