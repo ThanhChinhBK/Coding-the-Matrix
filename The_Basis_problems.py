@@ -307,5 +307,11 @@ def exchange(S, A, z):
         >>> exchange(S, A, z) == list2vec([one,0,one,one,one])
         True
     '''
-    pass
+    newS = list()
+    for v in S:
+        newS.append(v)
+    newS.append(z)
 
+    for x in newS:
+        if is_superfluous(newS, x) == True and x not in A and x != z:
+            return x
