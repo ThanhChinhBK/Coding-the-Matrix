@@ -216,9 +216,9 @@ def my_is_independent(L):
 ## 8: (Problem 6.7.7) My Rank
 def my_rank(L):
     '''
-    Input: 
+    Input:
         - L: a list of Vecs
-    Output: 
+    Output:
         - the rank of the list of Vecs
     Example:
         >>> L = [list2vec(v) for v in [[1,2,3],[4,5,6],[1.1,1.1,1.1]]]
@@ -322,7 +322,7 @@ def find_triangular_matrix_inverse(A):
         - A: an upper triangular Mat with nonzero diagonal elements
     Output:
         - Mat that is the inverse of A
-    
+
     Example:
         >>> A = listlist2mat([[1, .5, .2, 4],[0, 1, .3, .9],[0,0,1,.1],[0,0,0,1]])
         >>> find_triangular_matrix_inverse(A) == Mat(({0, 1, 2, 3}, {0, 1, 2, 3}), {(0, 1): -0.5, (1, 2): -0.3, (3, 2): 0.0, (0, 0): 1.0, (3, 3): 1.0, (3, 0): 0.0, (3, 1): 0.0, (2, 1): 0.0, (0, 2): -0.05000000000000002, (2, 0): 0.0, (1, 3): -0.87, (2, 3): -0.1, (2, 2): 1.0, (1, 0): 0.0, (0, 3): -3.545, (1, 1): 1.0})
