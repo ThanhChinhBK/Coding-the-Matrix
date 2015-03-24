@@ -10,7 +10,6 @@ from mat import Mat
 from vec import Vec
 
 
-
 ## 1: (Problem 6.7.2) Iterative Exchange Lemma
 w0 = list2vec([1,0,0])
 w1 = list2vec([0,1,0])
@@ -24,8 +23,8 @@ v2 = list2vec([0,3,3])
 # with appropriate lists of 3 vectors
 
 exchange_S0 = [w0, w1, w2]
-exchange_S1 = [...]
-exchange_S2 = [...]
+exchange_S1 = [v0, w1, w2]
+exchange_S2 = [v0, v1, w2]
 exchange_S3 = [v0, v1, v2]
 
 
@@ -40,8 +39,8 @@ v1 = list2vec([one,0,0])
 v2 = list2vec([one,one,0])
 
 exchange_2_S0 = [w0, w1, w2]
-exchange_2_S1 = [...]
-exchange_2_S2 = [...]
+exchange_2_S1 = [w0, w1, v0]
+exchange_2_S2 = [w0, v1, v0]
 exchange_2_S3 = [v0, v1, v2]
 
 
@@ -80,24 +79,27 @@ def morph(S, B):
         >>> sol == [(B[0],S[0]), (B[1],S[2]), (B[2],S[3])] or sol == [(B[0],S[1]), (B[1],S[2]), (B[2],S[3])]
         True
     '''
-    pass
-
-
+    from The_Basis_problems import exchange
+    result = list()
+    A = set()
+    for z in B:
+        result.append((z,exchange(S,A,z)))
+    return result
 
 ## 4: (Problem 6.7.5) Row and Column Rank Practice
 # Please express each solution as a list of Vecs
 
-row_space_1 = [...]
-col_space_1 = [...]
+row_space_1 = [Vec({0,1,2},{0:1,1:2}),Vec({0,1,2},{1:2,2:1})]
+col_space_1 = [Vec({0,1},{0:1,1:0}),Vec({0,1},{0:0,1:1})]
 
-row_space_2 = [...]
-col_space_2 = [...]
+row_space_2 = [Vec({0,1,2,3},{0:1,1:4}),Vec({0,1,2,3},{1:2,2:2}),Vec({0,1,2,3},{3:1,2:1})]
+col_space_2 = [Vec({0,1,2},{0:1}),Vec({0,1,2},{1:2,2:1}),Vec({0,1,2},{2:1})]
 
-row_space_3 = [...]
-col_space_3 = [...]
+row_space_3 = [Vec({0},{0:1})]
+col_space_3 = [Vec({0,1,2},{0:1,1:2,2:3})]
 
-row_space_4 = [...]
-col_space_4 = [...]
+row_space_4 = [Vec({0,1},{0:1,1:0}),Vec({0,1},{0:2,1:1})]
+col_space_4 = [Vec({0,1,2},{0:1,1:2,2:3}),Vec({0,1,2},{1:1,2:4})]
 
 
 
@@ -106,11 +108,11 @@ def subset_basis(T):
     '''
     Input:
         - T: a set of Vecs
-    Output: 
+    Output:
         - set S containing Vecs from T that is a basis for Span T.
     Examples:
         The following tests use the procedure is_independent, provided in module independence
-        
+
         >>> from vec import Vec
         >>> from independence import is_independent
         >>> a0 = Vec({'a','b','c','d'}, {'a':1})
@@ -142,8 +144,13 @@ def subset_basis(T):
         >>> subset_basis({c0,c1,c2,c3,c4}) == {c0,c1,c2,c4}
         True
     '''
-    pass
-
+    from The_Basis_problems import is_independent
+    res = set()
+    for x in T:
+        res.add(x)
+        if is_independent(res)==False:
+            res.remove(x)
+    return res
 
 
 ## 6: () Superset Basis Lemma in Python
