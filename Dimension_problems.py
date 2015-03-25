@@ -5,10 +5,10 @@ coursera = 1
 from vecutil import list2vec
 from GF2 import one
 from solver import solve
-from matutil import listlist2mat, coldict2mat
+from matutil import listlist2mat, coldict2mat, mat2coldict, mat2rowdict
 from mat import Mat
 from vec import Vec
-
+from The_Basis_problems import is_independent,is_superfluous, exchange
 
 ## 1: (Problem 6.7.2) Iterative Exchange Lemma
 w0 = list2vec([1,0,0])
@@ -79,7 +79,6 @@ def morph(S, B):
         >>> sol == [(B[0],S[0]), (B[1],S[2]), (B[2],S[3])] or sol == [(B[0],S[1]), (B[1],S[2]), (B[2],S[3])]
         True
     '''
-    from The_Basis_problems import exchange
     result = list()
     A = set()
     for z in B:
@@ -144,7 +143,6 @@ def subset_basis(T):
         >>> subset_basis({c0,c1,c2,c3,c4}) == {c0,c1,c2,c4}
         True
     '''
-    from The_Basis_problems import is_independent
     res = set()
     for x in T:
         res.add(x)
@@ -209,9 +207,18 @@ def my_is_independent(L):
         >>> L == [Vec(D,{0: 1}), Vec(D,{1: 1}), Vec(D,{2: 1}), Vec(D,{0: 1, 1: 1, 2: 1}), Vec(D,{0: 1, 1: 1}), Vec(D,{1: 1, 2: 1})]
         True
     '''
-    pass
-
-
+    """
+    for x in L:
+        if is_superfluous(set(L),x)==True:
+            return False
+    return True
+    """
+    from independence import rank
+    rank_num = rank(L)
+    if rank_num < len(L):
+        return False
+    else:
+        return True
 
 ## 8: (Problem 6.7.7) My Rank
 def my_rank(L):
@@ -229,8 +236,9 @@ def my_rank(L):
         >>> my_rank([list2vec(v) for v in [[1,1,1],[2,2,2],[3,3,3],[4,4,4],[123,432,123]]])
         2
     '''
-    pass
-
+    rank_num = 0
+    rank_num = len(subset_basis(L))
+    return rank_num
 
 
 ## 9: (Problem 6.7.11) Direct Sum Unique Representation
@@ -290,8 +298,10 @@ def is_invertible(M):
     >>> is_invertible(M1)
     False
     '''
-    pass
-
+    if my_is_independent(list(mat2rowdict(M).values())) and my_is_independent(list(mat2coldict(M).values())):
+        return True
+    else:
+        return False
 
 
 ## 11: (Problem 6.7.13) Inverse of a Matrix over GF(2)
@@ -309,8 +319,11 @@ def find_matrix_inverse(A):
         >>> find_matrix_inverse(M2) == Mat(M2.D, {(0, 1): one, (1, 0): one, (2, 2): one})
         True
     '''
-    pass
-
+    I={i:Vec(A.D[0],{i:one}) for i in A.D[1]}
+    B_coldict={}
+    for key in I.keys():
+        B_coldict[key]=solve(A,I[key])
+    return coldict2mat(B_coldict)
 
 
 ## 12: (Problem 6.7.14) Inverse of a Triangular Matrix
@@ -328,5 +341,18 @@ def find_triangular_matrix_inverse(A):
         >>> find_triangular_matrix_inverse(A) == Mat(({0, 1, 2, 3}, {0, 1, 2, 3}), {(0, 1): -0.5, (1, 2): -0.3, (3, 2): 0.0, (0, 0): 1.0, (3, 3): 1.0, (3, 0): 0.0, (3, 1): 0.0, (2, 1): 0.0, (0, 2): -0.05000000000000002, (2, 0): 0.0, (1, 3): -0.87, (2, 3): -0.1, (2, 2): 1.0, (1, 0): 0.0, (0, 3): -3.545, (1, 1): 1.0})
         True
     '''
-    pass
+    from triangular import triangular_solve
+    # triangular_solve(rowlist, label_list, b)
+    rowlist=list(mat2rowdict(A).values())
+    label_list=list(mat2rowdict(A).keys())
 
+    I={i:Vec(A.D[0],{i:1}) for i in A.D[1]}
+    B_coldict={}
+    for key in label_list:
+        B_coldict[key]=triangular_solve(rowlist, label_list, I[key])
+    return coldict2mat(B_coldict)
+
+#D = {0, 1, 2}
+#L = [Vec(D,{0: 1}), Vec(D,{1: 1}), Vec(D,{2: 1}), Vec(D,{0: 1, 1: 1, 2: 1}), Vec(D,{0: 1, 1: 1}), Vec(D,{1: 1, 2: 1})]
+#print(my_is_independent(L))
+#print(my_is_independent(L[:2]))
