@@ -83,6 +83,8 @@ def morph(S, B):
     A = set()
     for z in B:
         result.append((z,exchange(S,A,z)))
+        S.remove(exchange(S,A,z))
+        S.append(z)
     return result
 
 ## 4: (Problem 6.7.5) Row and Column Rank Practice
