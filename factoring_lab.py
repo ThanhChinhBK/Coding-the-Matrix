@@ -2,7 +2,7 @@
 coursera = 1
 # Please fill out this stencil and submit using the provided submission script.
 
-from vec import Vec
+from vec import Vec, getitem
 from GF2 import one
 
 from factoring_support import dumb_factor
@@ -29,8 +29,7 @@ def int2GF2(i):
         >>> int2GF2(100)
         0
     '''
-    pass
-
+    return one if i%2 == 1 else 0
 ## Task 2
 def make_Vec(primeset, factors):
     '''
@@ -45,8 +44,7 @@ def make_Vec(primeset, factors):
         >>> make_Vec({2,3,11}, [(2,3), (3,2)]) == Vec({2,3,11},{2:one})
         True
     '''
-    pass
-
+    return Vec(primeset, {x[0]:int2GF2(x[1]) for x in factors})
 ## Task 3
 def find_candidates(N, primeset):
     '''
@@ -83,14 +81,24 @@ def find_candidates(N, primeset):
                 Vec(D,{2: one, 3: one, 13: one})])
         True
     '''
-    pass
+    roots = []
+    rowlist = []
+    for x in range(2,N):
+        y = x + intsqrt(N)
+        tmp = dumb_factor(y*y-N, primeset)
+        if len(tmp) != 0 :
+            roots.append(y)
+            rowlist.append(make_Vec(primeset,tmp))
+        if len(roots) >= len(primeset)+1:
+            break
+    return (roots, rowlist)
 
 
 
 ## Task 4
 def find_a_and_b(v, roots, N):
     '''
-    Input: 
+    Input:
      - a {0,1,..., n-1}-vector v over GF(2) where n = len(roots)
      - a list roots of integers
      - an integer N to factor
@@ -108,8 +116,26 @@ def find_a_and_b(v, roots, N):
         >>> find_a_and_b(v, roots, N)
         (4081, 1170)
     '''
-    pass
+    alist = [ roots[i] for i in v.D if getitem(v,i)==one]
+    a = prod(alist)
+    c = prod([x*x-N for x in alist])
+    b = intsqrt(c)
+    assert b*b == c
+    return (a, b)
 
 ## Task 5
-
-nontrivial_divisor_of_2461799993978700679 = ... 
+'''
+N = 2461799993978700679
+primelist = primes(10000)
+(roots, rowlist) = find_candidates(N, primelist)
+M = echelon.transformation_rows(rowlist)
+k = -1
+while True:
+    v = M[k]
+    (a, b) = find_a_and_b(v, roots, N)
+    k -= 1
+    print(gcd(a-b, N))
+    if gcd(a-b, N)>1:
+        break
+'''
+nontrivial_divisor_of_2461799993978700679 = 1230926561
