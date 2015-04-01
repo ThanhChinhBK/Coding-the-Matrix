@@ -178,8 +178,13 @@ def superset_basis(C, T):
         >>> all(x in [a0,a1,a2,a3] for x in sb)
         True
     '''
-    pass
 
+    S={x for x in C}
+    for v in T:
+        S.add(v)
+        if is_independent(S)==False:
+            S.remove(v)
+        return S
 
 
 ## 7: (Problem 6.7.6) My Is Independent Procedure

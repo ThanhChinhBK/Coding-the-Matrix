@@ -45,7 +45,7 @@ def triangular_solve(rowlist, label_list, b):
     rowlist[n-2][d] is zero for every element d of D except for
     the last two elements of label_list, and so on.
 
-    This procedure assumes that rowlist[j][label_list[j]] != 0
+    Thit procedure assumes that rowlist[j][label_list[j]] != 0
     for j = 0,1, ..., n-1.
 
     The procedure returns the Vec x that is the unique solution
