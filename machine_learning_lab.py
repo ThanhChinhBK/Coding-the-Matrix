@@ -6,6 +6,9 @@ from mat import *
 from vec import *
 from cancer_data import *
 
+## Ungraded task
+#(A, b) = read_training_data('train.data')
+
 ## Task 1 ##
 def signum(u):
     '''
@@ -19,7 +22,12 @@ def signum(u):
         >>> signum(Vec({1,2,3},{1:2, 2:-1})) == Vec({1,2,3},{1:1,2:-1,3:1})
         True
     '''
-    pass
+    #return Vec{u.D, {k:x for k in u.D  })
+    f = {}
+    for k in u.D:
+        f[k] = 1 if getitem(u, k) >= 0 else -1
+    v = Vec(u.D, f)
+    return v
 
 ## Task 2 ##
 def fraction_wrong(A, b, w):
@@ -30,7 +38,7 @@ def fraction_wrong(A, b, w):
         - w: hypothesis Vec
     Output:
         - Fraction (as a decimal in [0,1]) of vectors incorrectly
-          classified by w 
+          classified by w
     Example:
         >>> A = Mat(({'a','b','c'},{'A','B'}), {('a','A'):-4, ('a','B'):3, ('b','A'):1, ('b','B'):8, ('c','A'):5, ('c','B'):2})
         >>> b = Vec({'a','b','c'}, {'a':1, 'b':-1,'c':1})
@@ -38,7 +46,9 @@ def fraction_wrong(A, b, w):
         >>> fraction_wrong(A, b, w)
         0.3333333333333333
     '''
-    pass
+    Aw = signum(matrix_vector_mul(A, w))
+    tmp = Aw - b
+    return sum([1 if getitem(tmp, k) != 0  else 0 for k in tmp.D]) / len(b.D)
 
 ## Task 3 ##
 def loss(A, b, w):
@@ -56,7 +66,8 @@ def loss(A, b, w):
         >>> loss(A, b, w)
         317
     '''
-    pass
+    return dot(matrix_vector_mul(A, w)-b, matrix_vector_mul(A, w)-b)
+
 
 ## Task 4 ##
 def find_grad(A, b, w):
@@ -74,7 +85,7 @@ def find_grad(A, b, w):
         >>> find_grad(A, b, w) == Vec({'B', 'A'},{'B': -290, 'A': 60})
         True
     '''
-    pass
+    return 2*(A*w-b)*A
 
 ## Task 5 ##
 def gradient_descent_step(A, b, w, sigma):
@@ -95,7 +106,7 @@ def gradient_descent_step(A, b, w, sigma):
         >>> gradient_descent_step(A, b, w, sigma) == Vec({'B', 'A'},{'B': 27.0, 'A': -5.0})
         True
     '''
-    pass
+    return w - sigma * find_grad(A, b, w)
 
 ## Ungraded task ##
 def gradient_descent(A, b, w, sigma, T):
@@ -109,3 +120,18 @@ def gradient_descent(A, b, w, sigma, T):
     Output: hypothesis vector obtained after T iterations of gradient descent.
     '''
     pass
+
+
+
+
+'''
+print(signum(Vec({1,2,3},{1:2, 2:-1})))
+A = Mat(({'a','b','c'},{'A','B'}), {('a','A'):-4, ('a','B'):3, ('b','A'):1, ('b','B'):8, ('c','A'):5, ('c','B'):2})
+b = Vec({'a','b','c'}, {'a':1, 'b':-1,'c':1})
+w = Vec({'A','B'}, {'A':1, 'B':-2})
+print(fraction_wrong(A, b, w))
+A = Mat(({'a','b','c'},{'A','B'}), {('a','A'):-4, ('a','B'):3, ('b','A'):1, ('b','B'):8, ('c','A'):5, ('c','B'):2})
+b = Vec({'a','b','c'}, {'a':1, 'b':-1,'c':1})
+w = Vec({'A','B'}, {'A':1, 'B':-2})
+print(loss(A, b, w))
+'''
