@@ -1,35 +1,7 @@
-# version code 542eddf1f327+
-coursera = 1
-# Please fill out this stencil and submit using the provided submission script.
-
 # Copyright 2013 Philip N. Klein
 from vec import Vec
 
 #Test your Mat class over R and also over GF(2).  The following tests use only R.
-
-def equal(A, B):
-    """
-    Returns true iff A is equal to B.
-
-    >>> Mat(({'a','b'}, {0,1}), {('a',1):0}) == Mat(({'a','b'}, {0,1}), {('b',1):0})
-    True
-    >>> A = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1})
-    >>> B = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1, ('b',1):0})
-    >>> C = Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1, ('b',1):5})
-    >>> A == B
-    True
-    >>> A == C
-    False
-    >>> A == Mat(({'a','b'}, {0,1}), {('a',1):2, ('b',0):1})
-    True
-    """
-    assert A.D == B.D
-    for row in A.D[0]:
-        for col in A.D[1]:
-            if getitem(A,(row, col)) != getitem(B,(row, col)): 
-                return False
-    return True
-
 
 def getitem(M, k):
     """
@@ -41,7 +13,34 @@ def getitem(M, k):
     0
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    return M.f[k] if k in M.f.keys() else 0
+    pass
+
+def equal(A, B):
+    """
+    Returns true iff A is equal to B.
+
+    Consider using brackets notation A[...] and B[...] in your procedure
+    to access entries of the input matrices.  This avoids some sparsity bugs.
+
+    >>> Mat(({'a','b'}, {'A','B'}), {('a','B'):0}) == Mat(({'a','b'}, {'A','B'}), {('b','B'):0})
+    True
+    >>> A = Mat(({'a','b'}, {'A','B'}), {('a','B'):2, ('b','A'):1})
+    >>> B = Mat(({'a','b'}, {'A','B'}), {('a','B'):2, ('b','A'):1, ('b','B'):0})
+    >>> C = Mat(({'a','b'}, {'A','B'}), {('a',1):2, ('b','A'):1, ('b','B'):5})
+    >>> A == B
+    True
+    >>> B == A
+    True
+    >>> A == C
+    False
+    >>> C == A
+    False
+    >>> A == Mat(({'a','b'}, {'A','B'}), {('a','B'):2, ('b','A'):1})
+    True
+    """
+    assert A.D == B.D
+    pass
+
 def setitem(M, k, val):
     """
     Set entry k of Mat M to val, where k is a 2-tuple.
@@ -60,10 +59,15 @@ def setitem(M, k, val):
     True
     """
     assert k[0] in M.D[0] and k[1] in M.D[1]
-    M.f[k]=val
+    pass
+
 def add(A, B):
     """
     Return the sum of Mats A and B.
+
+    Consider using brackets notation A[...] or B[...] in your procedure
+    to access entries of the input matrices.  This avoids some sparsity bugs.
+
     >>> A1 = Mat(({3, 6}, {'x','y'}), {(3,'x'):-2, (6,'y'):3})
     >>> A2 = Mat(({3, 6}, {'x','y'}), {(3,'y'):4})
     >>> B = Mat(({3, 6}, {'x','y'}), {(3,'x'):-2, (3,'y'):4, (6,'y'):3})
@@ -83,12 +87,8 @@ def add(A, B):
     True
     """
     assert A.D == B.D
-    C=A.copy()
-    for row in A.D[0]:
-        for col in A.D[1]:
-            setitem(C, (row,col), getitem(A, (row,col))+getitem(B, (row,col)))
-    return C
-    
+    pass
+
 def scalar_mul(M, x):
     """
     Returns the result of scaling M by x.
@@ -101,11 +101,7 @@ def scalar_mul(M, x):
     >>> 0.25*M == Mat(({1,3,5}, {2,4}), {(1,2):1.0, (5,4):0.5, (3,4):0.75})
     True
     """
-    C=M.copy()
-    for row in M.D[0]:
-        for col in M.D[1]:
-            setitem(C, (row,col), x*getitem(M, (row,col)))
-    return C
+    pass
 
 def transpose(M):
     """
@@ -119,15 +115,14 @@ def transpose(M):
     >>> M.transpose() == Mt
     True
     """
-    C=Mat((M.D[1], M.D[0]),{} )
-    for row in M.D[0]:
-        for col in M.D[1]:
-            setitem(C, (col,row), getitem(M, (row,col)))
-    return C
+    pass
 
 def vector_matrix_mul(v, M):
     """
     returns the product of vector v and matrix M
+
+    Consider using brackets notation v[...] in your procedure
+    to access entries of the input vector.  This avoids some sparsity bugs.
 
     >>> v1 = Vec({1, 2, 3}, {1: 1, 2: 8})
     >>> M1 = Mat(({1, 2, 3}, {'a', 'b', 'c'}), {(1, 'b'): 2, (2, 'a'):-1, (3, 'a'): 1, (3, 'c'): 7})
@@ -141,16 +136,21 @@ def vector_matrix_mul(v, M):
     >>> M2 = Mat(({'a','b'}, {0, 2, 4, 6, 7}), {})
     >>> v2*M2 == Vec({0, 2, 4, 6, 7},{})
     True
+    >>> v3 = Vec({'a','b'},{'a':1,'b':1})
+    >>> M3 = Mat(({'a', 'b'}, {0, 1}), {('a', 1): 1, ('b', 1): 1, ('a', 0): 1, ('b', 0): 1})
+    >>> v3*M3 == Vec({0, 1},{0: 2, 1: 2})
+    True
     """
     assert M.D[0] == v.D
-    v_tmp = Vec(M.D[1], {})
-    for col in v_tmp.D:
-        for row in M.D[0]:
-            v_tmp[col] = v_tmp[col] + getitem(M,(row,col)) * v[row] 
-    return v_tmp
+    pass
+
 def matrix_vector_mul(M, v):
     """
     Returns the product of matrix M and vector v.
+
+    Consider using brackets notation v[...] in your procedure
+    to access entries of the input vector.  This avoids some sparsity bugs.
+
     >>> N1 = Mat(({1, 3, 5, 7}, {'a', 'b'}), {(1, 'a'): -1, (1, 'b'): 2, (3, 'a'): 1, (3, 'b'):4, (7, 'a'): 3, (5, 'b'):-1})
     >>> u1 = Vec({'a', 'b'}, {'a': 1, 'b': 2})
     >>> N1*u1 == Vec({1, 3, 5, 7},{1: 3, 3: 9, 5: -2, 7: 3})
@@ -163,17 +163,20 @@ def matrix_vector_mul(M, v):
     >>> u2 = Vec({1, 2, 3, 5, 8}, {})
     >>> N2*u2 == Vec({('a', 'b'), ('c', 'd')},{})
     True
+    >>> M3 = Mat(({0,1},{'a','b'}),{(0,'a'):1, (0,'b'):1, (1,'a'):1, (1,'b'):1})
+    >>> v3 = Vec({'a','b'},{'a':1,'b':1})
+    >>> M3*v3 == Vec({0, 1},{0: 2, 1: 2})
+    True
     """
     assert M.D[1] == v.D
-    v_tmp = Vec(M.D[0], {})
-    for row in v_tmp.D:
-        for col in M.D[1]:
-            v_tmp[row] = v_tmp[row] + getitem(M,(row,col)) * v[col] 
-    return v_tmp
+    pass
 
 def matrix_matrix_mul(A, B):
     """
     Returns the result of the matrix-matrix multiplication, A*B.
+
+    Consider using brackets notation A[...] and B[...] in your procedure
+    to access entries of the input matrices.  This avoids some sparsity bugs.
 
     >>> A = Mat(({0,1,2}, {0,1,2}), {(1,1):4, (0,0):0, (1,2):1, (1,0):5, (0,1):3, (0,2):2})
     >>> B = Mat(({0,1,2}, {0,1,2}), {(1,0):5, (2,1):3, (1,1):2, (2,0):0, (0,0):1, (0,1):4})
@@ -195,19 +198,15 @@ def matrix_matrix_mul(A, B):
     True
     """
     assert A.D[1] == B.D[0]
-    M=Mat((A.D[0], B.D[1]), {})
-    for col in B.D[1]:
-        for row in A.D[0]:
-            v_tmp = Vec(B.D[0], {})
-            for row_t in B.D[0]:
-                v_tmp[row_t]=getitem(B, (row_t, col))
-            v = matrix_vector_mul(A, v_tmp)
-            setitem(M,(row, col), v[row]) 
-    return M
+    pass
+
 ################################################################################
 
 class Mat:
     def __init__(self, labels, function):
+        assert isinstance(labels, tuple)
+        assert isinstance(labels[0], set) and isinstance(labels[0], set)
+        assert isinstance(function, dict)
         self.D = labels
         self.f = function
 
