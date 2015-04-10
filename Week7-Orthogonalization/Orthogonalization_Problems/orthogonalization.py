@@ -67,4 +67,25 @@ def aug_orthogonalize(vlist):
         (vstar, sigmadict) = aug_project_orthogonal(v, vstarlist)
         vstarlist.append(vstar)
         sigma_vecs.append(Vec(D, sigmadict))
+
+def aug_orthonormalize(L):
+
+    '''
+    Input:
+        - L: a list of Vecs
+    Output:
+        - A pair Qlist, Rlist such that:
+            * coldict2mat(L) == coldict2mat(Qlist) * coldict2mat(Rlist)
+            * Qlist = orthonormalize(L)
+    >>> from vec import Vec
+    >>> D={'a','b','c','d'}
+    >>> L = [Vec(D, {'a':4,'b':3,'c':1,'d':2}), Vec(D, {'a':8,'b':9,'c':-5,'d':-5}), Vec(D, {'a':10,'b':1,'c':-1,'d':5})]
+    >>> Qlist, Rlist = aug_orthonormalize(L)
+    '''
+    Ql, Rl = aug_orthogonalize(L)
+    Qlist = orthonormalize(Ql)
+    mults = [(v*v)**(1/2) for v in Ql]
+    for vector in Rl:
+        for i in range(len(vector.D)):
+            vector[i] = vector[i] * mults[i]
     return vstarlist, sigma_vecs

@@ -6,40 +6,37 @@ from mat import Mat
 from vec import Vec
 from vecutil import list2vec
 from matutil import listlist2mat
-#from orthogonalization import orthogonalize, project_orthogonal
-#from GF2 import one
-
+from orthogonalization import *
+from math import sqrt
+from triangular import triangular_solve
 
 ## 1: (Problem 1) Generators for orthogonal complement
 U_vecs_1 = [list2vec([0,0,3,2])]
 W_vecs_1 = [list2vec(v) for v in [[1,2,-3,-1],[1,2,0,1],[3,1,0,-1],[-1,-2,3,1]]]
 # Give a list of Vecs
+
 #print(orthogonalize(W_vecs_1))
-ortho_compl_generators_1 = ...# [Vec({0, 1, 2, 3},{0: -1.2460684954515273e-16, 1: -2.1893488932780114e-16, 2: 2.1713452766624683e-16, 3: 7.365115888176723e-18})]#[ project_orthogonal(U_vecs_1[0], orthogonalize(W_vecs_1)) ]
-#print(ortho_compl_generators_1)
+ortho_compl_generators_1 =[project_orthogonal(b, U_vecs_1) for b in W_vecs_1 ]
 
 U_vecs_2 = [list2vec([3,0,1])]
 W_vecs_2 = [list2vec(v) for v in [[1,0,0],[1,0,1]]]
 
 # Give a list of Vecs
-ortho_compl_generators_2 =...# [list2vec([0,0,0])]
-#ortho_compl_generators_2 =[ project_orthogonal(U_vecs_2[0], orthogonalize(W_vecs_2))]
-#print(orthogonalize(W_vecs_2))
-#print(ortho_compl_generators_2)
+ortho_compl_generators_2 = [project_orthogonal(b, U_vecs_2) for b in W_vecs_2 ]
 
 U_vecs_3 = [list2vec(v) for v in [[-4,3,1,-2],[-2,2,3,-1]]]
 W_vecs_3 = [list2vec(v) for v in [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]]
 
 # Give a list of Vecs
-ortho_compl_generators_3 =...# [list2vec([0,0,0,0]),list2vec([0,0,0,0])]#[project_orthogonal(U_vecs_3[i], orthogonalize(W_vecs_3)) for i in range(2)]
-#print(ortho_compl_generators_3)
+ortho_compl_generators_3 = [project_orthogonal(b, U_vecs_3) for b in W_vecs_3 ]
 
 
 ## 2: (Problem 2) Basis for null space
 # Your solution should be a list of Vecs
-null_space_basis = ...
 
-
+null_space_basis =[ project_orthogonal(b, [list2vec(v) for v in [[-4,-1,-3,-1],[0,4,0,-1]]]) for b in [list2vec(i) for i in [[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]]] ]
+#print([list2vec(v) for v in [[-4,-1,-3,-1],[0,4,0,-1]]])
+#print(null_space_basis)
 
 ## 3: (Problem 3) Orthonormalize(L)
 def orthonormalize(L):
@@ -66,7 +63,8 @@ def orthonormalize(L):
     --------------------------
      0.528 -0.653 -0.512 0.181
     '''
-    pass
+    V=orthogonalize(L)
+    return [1/sqrt(sum([v[i]**2 for i in range(len(v.D))]))*v for v in V]
 
 
 
@@ -83,48 +81,33 @@ def aug_orthonormalize(L):
     >>> D={'a','b','c','d'}
     >>> L = [Vec(D, {'a':4,'b':3,'c':1,'d':2}), Vec(D, {'a':8,'b':9,'c':-5,'d':-5}), Vec(D, {'a':10,'b':1,'c':-1,'d':5})]
     >>> Qlist, Rlist = aug_orthonormalize(L)
-    >>> from matutil import coldict2mat
-    >>> print(coldict2mat(Qlist))
-    <BLANKLINE>
-               0      1      2
-         ---------------------
-     a  |   0.73  0.187  0.528
-     b  |  0.548  0.403 -0.653
-     c  |  0.183 -0.566 -0.512
-     d  |  0.365 -0.695  0.181
-    <BLANKLINE>
-    >>> print(coldict2mat(Rlist))
-    <BLANKLINE>
-              0    1      2
-         ------------------
-     0  |  5.48 8.03   9.49
-     1  |     0 11.4 -0.636
-     2  |     0    0   6.04
-    <BLANKLINE>
-    >>> print(coldict2mat(Qlist)*coldict2mat(Rlist))
-    <BLANKLINE>
-           0  1  2
-         ---------
-     a  |  4  8 10
-     b  |  3  9  1
-     c  |  1 -5 -1
-     d  |  2 -5  5
-    <BLANKLINE>
     '''
-    pass
-
-
+    #Qlist, Rlist = aug_orthonormalize(L)
+    #Rl=[1/sqrt(sum([v[i]**2 for i in range(len(v.D))]))*v for v in orthogonalize( Rlist)]
+    #Ql=[1/sqrt(sum([v[i]**2 for i in range(len(v.D))]))*v for v in orthogonalize(Qlist)]
+    #return  (Ql,Rl)
+    Ql, Rl = aug_orthogonalize(L)
+    Qlist = orthonormalize(Ql)
+    mults = [(v*v)**(1/2) for v in Ql]
+    for vector in Rl:
+        for i in range(len(vector.D)):
+            vector[i] = vector[i] * mults[i]
+    return Qlist, Rl
 
 ## 5: (Problem 5) QR factorization of small matrices
 #Compute the QR factorization
 
 #Please represent your solution as a list of rows, such as [[1,0,0],[0,1,0],[0,0,1]]
-
-part_1_Q = ...
-part_1_R = ...
-
-part_2_Q = ...
-part_2_R = ...
+A=[list2vec(v) for v in [[6,6], [2,0],[3,3]]]
+#print(A)
+part_1_Q = ... #aug_orthonormalize(A)[0]
+part_1_R = ... #aug_orthonormalize(A)[1]
+#print(list[orthonormalize(A)])
+A=[list2vec(v) for v in [[2,3], [2,1],[1,1]]]
+#print(A)
+part_2_Q = ... #aug_orthonormalize(A)[0]
+part_2_R = ... #aug_orthonormalize(A)[1]
+#print(list(orthonormalize(A)))
 
 
 
@@ -140,7 +123,6 @@ def QR_factor(A):
     Q = coldict2mat(Qlist)
     R = coldict2mat(list2dict(Rlist, col_labels))
     return Q,R
-
 
 def QR_solve(A, b):
     '''
@@ -162,7 +144,8 @@ def QR_solve(A, b):
         >>> result.is_almost_zero()
         True
     '''
-    pass
+    Q, R = QR_factor(A)
+    return triangular_solve(mat2rowdict(R), sorted(A.D[1],key=repr), Q.transpose()*b)
 
 
 
@@ -173,8 +156,8 @@ least_squares_A1 = listlist2mat([[8, 1], [6, 2], [0, 6]])
 least_squares_Q1 = listlist2mat([[.8,-0.099],[.6, 0.132],[0,0.986]])
 least_squares_R1 = listlist2mat([[10,2],[0,6.08]])
 least_squares_b1 = list2vec([10, 8, 6])
-
-x_hat_1 = ...
+from solver import solve
+x_hat_1 = solve(least_squares_R1, least_squares_Q1.transpose()*least_squares_b1)
 
 
 least_squares_A2 = listlist2mat([[3, 1], [4, 1], [5, 1]])
@@ -182,7 +165,7 @@ least_squares_Q2 = listlist2mat([[.424, .808],[.566, .115],[.707, -.577]])
 least_squares_R2 = listlist2mat([[7.07, 1.7],[0,.346]])
 least_squares_b2 = list2vec([10,13,15])
 
-x_hat_2 = ...
+x_hat_2 = solve(least_squares_R2, least_squares_Q2.transpose()*least_squares_b2)
 
 
 

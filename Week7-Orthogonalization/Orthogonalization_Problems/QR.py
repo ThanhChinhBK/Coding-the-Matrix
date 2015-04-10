@@ -1,5 +1,5 @@
 # Copyright 2013 Philip N. Klein
-from orthonormalization import aug_orthonormalize
+from orthonormalization import *
 from dictutil import dict2list, list2dict
 from matutil import mat2coldict, coldict2mat
 
